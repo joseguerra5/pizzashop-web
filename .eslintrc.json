@@ -4,5 +4,4 @@
   "rules": {
     "simple-import-sort/imports": "error"
   }
-
 }
