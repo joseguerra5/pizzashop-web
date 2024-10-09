@@ -1,4 +1,4 @@
-import { Header } from "@/components/ui/Header";
+
 import { Helmet } from "react-helmet-async";
 
 export function Dashboard() {
@@ -6,7 +6,7 @@ export function Dashboard() {
     <>
       <Helmet title="Dashboard" />
       <div className="flex min-h-full flex-col">
-        <Header />
+
       </div>
     </>
   );
