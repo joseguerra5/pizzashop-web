@@ -1,12 +1,12 @@
-import {
-  DropdownMenuTrigger,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuItem,
-} from "@radix-ui/react-dropdown-menu";
 import { Button } from "./button";
 import { Building, ChevronDown, LogOut } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "./dropdown-menu";
 
 export function AccountMenu() {
   return (
@@ -20,7 +20,7 @@ export function AccountMenu() {
           <ChevronDown />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56 flex flex-col gap-2">
+      <DropdownMenuContent align="end" className="flex w-56 flex-col gap-2">
         <DropdownMenuLabel className="flex flex-col">
           <span>José Guerra</span>
           <span className="text-xs text-muted-foreground">
@@ -32,7 +32,7 @@ export function AccountMenu() {
           <span>Perfil da loja</span>
         </DropdownMenuItem>
 
-        <DropdownMenuItem className="text-rose-500 dark:text-rose-400 flex items-center">
+        <DropdownMenuItem className="flex items-center text-rose-500 dark:text-rose-400">
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sair</span>
         </DropdownMenuItem>
