@@ -1,9 +1,11 @@
+import { signIn } from "@/api/sign-in";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useMutation } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -14,22 +16,36 @@ const signInForm = z.object({
 type SignInForm = z.infer<typeof signInForm>;
 
 export function SignIn() {
+  const [searchParams] = useSearchParams();
   const {
     handleSubmit,
     register,
     formState: { isSubmitting },
-  } = useForm<SignInForm>();
+  } = useForm<SignInForm>({
+    defaultValues: {
+      email: searchParams.get("email") ?? "",
+    },
+  });
+
+  //usado toda vez que fazemos uma ação que não da retorno, como PUT, POST e delete : todo get é um query
+  //mutationFN é a função que vai ser usada para fazer a mutação
+  //mutateAsync é a função que a gente vai usar para chamar a função signIn
+  const { mutateAsync: authenticate } = useMutation({
+    mutationFn: signIn,
+  });
 
   async function handleSingIn(data: SignInForm) {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log(data);
-
-    toast.success("enviamos um link de autenticação para seu e-mail", {
-      action: {
-        label: "Reenviar",
-        onClick: () => handleSingIn(data),
-      },
-    });
+    try {
+      await authenticate({ email: data.email });
+      toast.success("enviamos um link de autenticação para seu e-mail", {
+        action: {
+          label: "Reenviar",
+          onClick: () => handleSingIn(data),
+        },
+      });
+    } catch {
+      toast.error("Credenciais invalidas");
+    }
   }
   return (
     <>
