@@ -10,7 +10,7 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
-import { getManegedRestaurantProfile } from "@/api/get-managed-restaurant";
+import { getManegedRestaurantProfile, GetManegedRestaurantResponse } from "@/api/get-managed-restaurant";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,7 +21,7 @@ import { queryClient } from "@/lib/react-query";
 
 const storeProfimeSchema = z.object({
   name: z.string().min(1),
-  description: z.string(),
+  description: z.string().nullable(),
 });
 type StoreProfileSchema = z.infer<typeof storeProfimeSchema>;
 
@@ -44,20 +44,37 @@ export function StoreProfileDialog() {
     },
   });
 
+  function updateManagedRestaurantCached({ name, description}: StoreProfileSchema) {
+
+    const cached = queryClient.getQueryData<GetManegedRestaurantResponse>(["managed-restaurant"]);
+
+    if (cached) {
+      queryClient.setQueryData<GetManegedRestaurantResponse>(["managed-restaurant"], {
+        ...cached,
+        name,
+        description,
+      });
+    }
+
+    return {cached}
+  }
+
   const { mutateAsync: updateProfileFn } = useMutation({
     mutationFn: updateProfile,
-    //no sucesso da mutação eu tenho que pegar o cached antigo e se tiver cache eu seto um query data com toda info em cache mais as info mudadas (mutação do cache, future mais perfeita do react query)
-    onSuccess(_, { name, description }) {
-      const cached = queryClient.getQueryData(["managed-restaurant"]);
+    //no sucesso da mutação eu tenho que pegar o cached antigo e se tiver cache eu seto um query data com toda info em cache mais as info mudadas (mutação do cache, future mais perfeita do react query) usando o onSuccess
 
-      if (cached) {
-        queryClient.setQueryData(["managed-restaurant"], {
-          ...cached,
-          name,
-          description,
-        });
-      }
+    //onMutate
+    onMutate({ name, description }) {
+     const {cached} = updateManagedRestaurantCached({name, description})
+
+      return {previousProfile: cached}
     },
+    onError(_, __, context) {
+      //se der erro vai pegar o cached da interface otimista no onMutate e vai atualizar novamente com a informação guardada em cache
+      if(context?.previousProfile) {
+        updateManagedRestaurantCached(context.previousProfile)
+      }
+    }
   });
 
   async function handleUpdateProfile(data: StoreProfileSchema) {
