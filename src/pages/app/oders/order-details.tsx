@@ -18,6 +18,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
 import { pt } from "date-fns/locale";
+import { OrderDetailSkeleton } from "./order-detail-skeleton";
 
 export interface OrderDetailsProps {
   orderId: string
@@ -41,7 +42,7 @@ export function OrderDetails({orderId, open}: OrderDetailsProps) {
         </DialogDescription>
       </DialogHeader>
 
-      {order && (
+      {order ? (
         <div className="space-y-6">
         <Table>
           <TableBody>
@@ -72,7 +73,7 @@ export function OrderDetails({orderId, open}: OrderDetailsProps) {
                 Realizado há
               </TableCell>
               <TableCell>
-                {formatDistanceToNow(order.createdAt, {
+                {formatDistanceToNow(new Date(order.createdAt), {
                   locale: pt,
                   addSuffix: true
                 })}
@@ -120,6 +121,9 @@ export function OrderDetails({orderId, open}: OrderDetailsProps) {
           </TableFooter>
         </Table>
       </div>
+      ) :
+      (
+        <OrderDetailSkeleton/>
       )}
     </DialogContent>
   );

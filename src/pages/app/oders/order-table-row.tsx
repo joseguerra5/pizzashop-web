@@ -24,7 +24,6 @@ export interface OrderTableRowProps {
   };
 }
 
-
 export function OrderTableRow({order}: OrderTableRowProps) {
 
   //virou controlled component com o controle a partir do estado
@@ -93,7 +92,7 @@ export function OrderTableRow({order}: OrderTableRowProps) {
         </Dialog>
       </TableCell>
       <TableCell>{order.orderId}</TableCell>
-      <TableCell className="text-muted-foreground">{formatDistanceToNow(order.createdAt, {
+      <TableCell className="text-muted-foreground">{formatDistanceToNow(new Date(order.createdAt), {
         locale: pt,
         addSuffix: true
       })}</TableCell>
