@@ -10,7 +10,10 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
-import { getManegedRestaurantProfile, GetManegedRestaurantResponse } from "@/api/get-managed-restaurant";
+import {
+  getManegedRestaurantProfile,
+  GetManegedRestaurantResponse,
+} from "@/api/get-managed-restaurant";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,19 +47,26 @@ export function StoreProfileDialog() {
     },
   });
 
-  function updateManagedRestaurantCached({ name, description}: StoreProfileSchema) {
-
-    const cached = queryClient.getQueryData<GetManegedRestaurantResponse>(["managed-restaurant"]);
+  function updateManagedRestaurantCached({
+    name,
+    description,
+  }: StoreProfileSchema) {
+    const cached = queryClient.getQueryData<GetManegedRestaurantResponse>([
+      "managed-restaurant",
+    ]);
 
     if (cached) {
-      queryClient.setQueryData<GetManegedRestaurantResponse>(["managed-restaurant"], {
-        ...cached,
-        name,
-        description,
-      });
+      queryClient.setQueryData<GetManegedRestaurantResponse>(
+        ["managed-restaurant"],
+        {
+          ...cached,
+          name,
+          description,
+        },
+      );
     }
 
-    return {cached}
+    return { cached };
   }
 
   const { mutateAsync: updateProfileFn } = useMutation({
@@ -65,16 +75,16 @@ export function StoreProfileDialog() {
 
     //onMutate
     onMutate({ name, description }) {
-     const {cached} = updateManagedRestaurantCached({name, description})
+      const { cached } = updateManagedRestaurantCached({ name, description });
 
-      return {previousProfile: cached}
+      return { previousProfile: cached };
     },
     onError(_, __, context) {
       //se der erro vai pegar o cached da interface otimista no onMutate e vai atualizar novamente com a informação guardada em cache
-      if(context?.previousProfile) {
-        updateManagedRestaurantCached(context.previousProfile)
+      if (context?.previousProfile) {
+        updateManagedRestaurantCached(context.previousProfile);
       }
-    }
+    },
   });
 
   async function handleUpdateProfile(data: StoreProfileSchema) {

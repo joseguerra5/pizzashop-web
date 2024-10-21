@@ -7,7 +7,9 @@ export interface GetManegedRestaurantResponse {
   description: string | null;
   managerId: string | null;
 }
-export async function  getManegedRestaurantProfile() {
-  const response = await api.get<GetManegedRestaurantResponse>("/managed-restaurant")
-  return response.data
+export async function getManegedRestaurantProfile() {
+  const response = await api.get<GetManegedRestaurantResponse>(
+    "/managed-restaurant",
+  );
+  return response.data;
 }

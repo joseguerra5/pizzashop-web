@@ -33,19 +33,23 @@ export function SignUp() {
   const navigate = useNavigate();
 
   async function handleSingUp(data: SignUpForm) {
-    await registerRestaurantFn({
-      restaurantName: data.restaurantName,
-      managerName: data.managerName,
-      email: data.email,
-      phone: data.phone,
-    });
+    try {
+      await registerRestaurantFn({
+        restaurantName: data.restaurantName,
+        managerName: data.managerName,
+        email: data.email,
+        phone: data.phone,
+      });
 
-    toast.success("Restaurante cadastrado com sucesso", {
-      action: {
-        label: "Login",
-        onClick: () => navigate(`/sign-in?email=${data.email}`),
-      },
-    });
+      toast.success("Restaurante cadastrado com sucesso", {
+        action: {
+          label: "Login",
+          onClick: () => navigate(`/sign-in?email=${data.email}`),
+        },
+      });
+    } catch {
+      toast.error("Erro ao cadastrar restaurante");
+    }
   }
   return (
     <>

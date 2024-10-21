@@ -8,7 +8,7 @@ export interface GetProfileResponse {
   createdAt: Date | null;
   updatedAt: Date | null;
 }
-export async function  getProfile() {
-  const response = await api.get<GetProfileResponse>("/me")
-  return response.data
+export async function getProfile() {
+  const response = await api.get<GetProfileResponse>("/me");
+  return response.data;
 }

@@ -17,7 +17,7 @@ import { SignOut } from "@/api/sign-out";
 import { useNavigate } from "react-router-dom";
 
 export function AccountMenu() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { data: profile, isLoading: isLoadingProfile } = useQuery({
     //query key serve para identificar as requisições semelhantes e não fica duplicando requisiçÕes
@@ -34,15 +34,15 @@ export function AccountMenu() {
       staleTime: Infinity,
     });
 
-    const {mutateAsync: signOutFn, isPending: isSigningOut} = useMutation({
-      mutationFn: SignOut,
-      onSuccess: () => {
-        navigate("/sign-in", {
-          //substitui a rota e impede de clicar no botão de voltar
-          replace: true
-        })
-      }
-    })
+  const { mutateAsync: signOutFn, isPending: isSigningOut } = useMutation({
+    mutationFn: SignOut,
+    onSuccess: () => {
+      navigate("/sign-in", {
+        //substitui a rota e impede de clicar no botão de voltar
+        replace: true,
+      });
+    },
+  });
 
   return (
     <Dialog>
@@ -85,7 +85,11 @@ export function AccountMenu() {
             </DropdownMenuItem>
           </DialogTrigger>
 
-          <DropdownMenuItem className="flex items-center text-rose-500 dark:text-rose-400" asChild disabled={isSigningOut}>
+          <DropdownMenuItem
+            className="flex items-center text-rose-500 dark:text-rose-400"
+            asChild
+            disabled={isSigningOut}
+          >
             <button className="w-full" onClick={() => signOutFn()}>
               <LogOut className="mr-2 h-4 w-4" />
               <span>Sair</span>

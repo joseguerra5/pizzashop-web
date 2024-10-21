@@ -16,71 +16,76 @@ import { z } from "zod";
 const orderFilterSchema = z.object({
   orderId: z.string().optional(),
   customerName: z.string().optional(),
-  status: z.string().optional()
-})
+  status: z.string().optional(),
+});
 
-type OrderFilterSchema = z.infer<typeof orderFilterSchema>
+type OrderFilterSchema = z.infer<typeof orderFilterSchema>;
 
 export function OrderTableFilter() {
-    const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams();
 
-    const orderId = searchParams.get("orderId")
-    const customerName = searchParams.get("customerName")
-    const status = searchParams.get("status")
+  const orderId = searchParams.get("orderId");
+  const customerName = searchParams.get("customerName");
+  const status = searchParams.get("status");
 
-    const { register, handleSubmit, control, reset } = useForm<OrderFilterSchema>({
+  const { register, handleSubmit, control, reset } = useForm<OrderFilterSchema>(
+    {
       resolver: zodResolver(orderFilterSchema),
       defaultValues: {
         orderId: orderId ?? "",
         customerName: customerName ?? "",
         status: status ?? "all",
-      }
-    })
+      },
+    },
+  );
 
-    function handleClearFilters() {
-      setSearchParams(state => {
-        state.delete("orderId")
-        state.delete("customerName")
-        state.delete("status")
-        state.set("page", "1")
+  function handleClearFilters() {
+    setSearchParams((state) => {
+      state.delete("orderId");
+      state.delete("customerName");
+      state.delete("status");
+      state.set("page", "1");
 
-        return state
-      })
-      reset({
-        orderId: "",
-        customerName: "",
-        status: "all"
-      })
-    }
-  
+      return state;
+    });
+    reset({
+      orderId: "",
+      customerName: "",
+      status: "all",
+    });
+  }
 
-  function handleFilter({orderId, customerName, status}: OrderFilterSchema) {
-    setSearchParams(state => {
+  function handleFilter({ orderId, customerName, status }: OrderFilterSchema) {
+    setSearchParams((state) => {
       if (orderId) {
-        state.set("orderId", orderId)
+        state.set("orderId", orderId);
       } else {
-        state.delete("orderId")
+        state.delete("orderId");
       }
 
       if (customerName) {
-        state.set("customerName", customerName)
+        state.set("customerName", customerName);
       } else {
-        state.delete("customerName")
+        state.delete("customerName");
       }
 
       if (status) {
-        state.set("status", status)
+        state.set("status", status);
       } else {
-        state.set("status", "all")
+        state.set("status", "all");
       }
 
-      state.set("page", "1")
-      return state
-    })
+      state.set("page", "1");
+      return state;
+    });
   }
 
   return (
-    <form action="" className="flex items-center gap-2" onSubmit={handleSubmit(handleFilter)}>
+    <form
+      action=""
+      className="flex items-center gap-2"
+      onSubmit={handleSubmit(handleFilter)}
+    >
       <span>Filtros:</span>
       <Input
         type="text"
@@ -96,12 +101,18 @@ export function OrderTableFilter() {
         className="w-auto"
         {...register("orderId")}
       />
-      <Controller 
+      <Controller
         name="status"
         control={control}
-        render={({field: {name, onChange, value, disabled }}) => {
+        render={({ field: { name, onChange, value, disabled } }) => {
           return (
-            <Select defaultValue="all" name={name} onValueChange={onChange} value={value} disabled={disabled}>
+            <Select
+              defaultValue="all"
+              name={name}
+              onValueChange={onChange}
+              value={value}
+              disabled={disabled}
+            >
               <SelectTrigger className="h-8 w-[100px]">
                 <SelectValue />
               </SelectTrigger>
@@ -115,18 +126,20 @@ export function OrderTableFilter() {
                 <SelectItem value="delivered">Entregue</SelectItem>
               </SelectContent>
             </Select>
-          )
+          );
         }}
       />
-
-
-      
 
       <Button type="submit" variant="secondary" size="sm">
         <Search className="mr-2 h-4 w-4" /> Filtrar resultados
       </Button>
 
-      <Button onClick={handleClearFilters} type="button" variant="outline" size="sm">
+      <Button
+        onClick={handleClearFilters}
+        type="button"
+        variant="outline"
+        size="sm"
+      >
         <X className="mr-2 h-4 w-4" /> Remover filtros
       </Button>
     </form>

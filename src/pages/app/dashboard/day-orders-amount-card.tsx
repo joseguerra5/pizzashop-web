@@ -5,10 +5,10 @@ import { ForkKnife } from "lucide-react";
 import { MetricCardSkeleton } from "./metric-card-skeletom";
 
 export function DayOrdersAmountCard() {
-  const {data: dayOrdersAmount} = useQuery({
+  const { data: dayOrdersAmount } = useQuery({
     queryFn: getDayOrdersAmount,
-    queryKey: ["metrics", "day-orders-amount"]
-  })
+    queryKey: ["metrics", "day-orders-amount"],
+  });
   return (
     <Card>
       <CardTitle className="flex flex-row justify-between p-4">
@@ -16,26 +16,33 @@ export function DayOrdersAmountCard() {
         <ForkKnife />
       </CardTitle>
       <CardContent>
-      {dayOrdersAmount ? (
-        <>
-           <h3 className="text-2xl font-bold">{dayOrdersAmount.amount.toLocaleString("pt")}</h3>
-           <p>
-            {dayOrdersAmount.diffFromYesterday >= 0 ? (
-              <>
-                <span className="text-green-600">{dayOrdersAmount.diffFromYesterday}%</span> em relação a ontem
-              </>
-            ) : (
-              <>
-                <span className="text-red-600">{dayOrdersAmount.diffFromYesterday}%</span> em relação a ontem
-              </>
-            )}
-           </p>
-        </>
+        {dayOrdersAmount ? (
+          <>
+            <h3 className="text-2xl font-bold">
+              {dayOrdersAmount.amount.toLocaleString("pt")}
+            </h3>
+            <p>
+              {dayOrdersAmount.diffFromYesterday >= 0 ? (
+                <>
+                  <span className="text-green-600">
+                    {dayOrdersAmount.diffFromYesterday}%
+                  </span>{" "}
+                  em relação a ontem
+                </>
+              ) : (
+                <>
+                  <span className="text-red-600">
+                    {dayOrdersAmount.diffFromYesterday}%
+                  </span>{" "}
+                  em relação a ontem
+                </>
+              )}
+            </p>
+          </>
         ) : (
           <MetricCardSkeleton />
         )}
-       
       </CardContent>
-  </Card>
-  )
+    </Card>
+  );
 }
