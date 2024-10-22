@@ -6,7 +6,7 @@ export const getManagedRestaurantMock = http.get<
   never,
   never,
   GetManegedRestaurantResponse
->("/metrics/daily-receipt-in-period", () => {
+>("/managed-restaurant", () => {
   return HttpResponse.json({
     createdAt: new Date("03/04/2024"),
     description: "criado com muito amor",

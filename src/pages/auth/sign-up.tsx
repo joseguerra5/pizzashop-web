@@ -108,7 +108,7 @@ export function SignUp() {
               />
             </div>
             <Button disabled={isSubmitting} className="w-full">
-              Acessar painel
+              Registrar restaurante
             </Button>
             <p className="px-6 text-center text-sm leading-relaxed text-muted-foreground">
               Ao continuas, vocë concorda com nossos{" "}
